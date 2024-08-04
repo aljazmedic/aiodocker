@@ -23,7 +23,8 @@ classifiers = [
     "Programming Language :: Python :: 3.12"
 ]
 dependencies = [
-    "aiohttp>=3.8",
+    # It has to be lower than 3.10 and >=3.8
+    "aiohttp>=3.8,<3.10.0",
 ]
 
 [project.optional-dependencies]

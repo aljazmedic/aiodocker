@@ -73,7 +73,7 @@ _sock_search_paths = [
     Path.home() / ".docker/run/docker.sock",
 ]
 
-_rx_version = re.compile(r"^v\d+\.\d+$")
+_rx_version = re.compile(r"^v(\d+)\.(\d+)$")
 _rx_tcp_schemes = re.compile(r"^(tcp|http)://")
 
 
@@ -208,6 +208,10 @@ class Docker:
         if self.api_version == "auto":
             ver = await self._query_json("version", versioned_api=False)
             self.api_version = "v" + str(ver["ApiVersion"])
+        m = _rx_version.match(self.api_version)
+        if m is None:
+            raise ValueError("Invalid API version format")
+        self.api_version_tuple = tuple(map(int, m.groups()))
 
     @asynccontextmanager
     async def _query(
