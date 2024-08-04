@@ -359,6 +359,9 @@ class DockerImages:
         if platform:
             params["platform"] = platform
 
+        if self.docker.api_version >= (1, 40):
+            params["version"] = "2" # Use builkit
+
         cm = self.docker._query(
             "build",
             "POST",
